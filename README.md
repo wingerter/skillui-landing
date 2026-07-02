@@ -1,22 +1,27 @@
-# skillui — Landingpage
+# skillui — Landing page
 
-Self-contained Marketing-Landingpage für **skillui** im MindBlow-Media-Branding.
-Highlight: der automatische **Cookie/Consent-Dismiss** vor der Design-System-Extraktion.
+Self-contained marketing landing page for **skillui**, in the MindBlow Media brand.
+Highlight: the automatic **cookie / consent dismiss** before design-system extraction.
+Bilingual, English is the default.
 
-- `index.html` — die komplette Seite (inline CSS + JS, keine Build-Schritte)
-- `logo-head.png`, `logo-horizontal.png` — Markenlogos
+| File | Purpose |
+|------|---------|
+| `index.html` | English landing page (**default** — served at `/`) |
+| `de.html` | German version (served at `/de.html`) |
+| `styles.css` | Shared stylesheet (MindBlow Media tokens + layout) |
+| `app.js` | Shared behaviour (cookie-dismiss demo, scroll reveal) |
+| `demo.mp4` | Hero demo video (self-hosted, ~8 MB) |
+| `logo-head.png`, `logo-horizontal.png` | Brand logos |
+
+A language switch (EN / DE) sits in the header and footer of both pages.
 
 ## Deploy
 
-Statische Seite, zero-config. Auf [Vercel](https://vercel.com):
+Static site, zero config. On [Vercel](https://vercel.com): **Add New Project → Import**
+this repo, framework preset *Other* (no build command), **Deploy**. Vercel redeploys
+on every push.
 
-1. **Add New Project → Import** dieses Repo
-2. Framework Preset: *Other* (kein Build-Command nötig)
-3. **Deploy**
-
-Vercel deployt bei jedem Push automatisch neu.
-
-Lokal ansehen:
+View locally:
 
 ```bash
 python3 -m http.server 8000
@@ -25,4 +30,4 @@ python3 -m http.server 8000
 
 ---
 
-Entwickelt mit ❤ in München & Bangkok · MindBlow Media
+Made with ❤ in Munich & Bangkok · MindBlow Media

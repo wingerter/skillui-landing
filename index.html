@@ -1,326 +1,37 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>skillui — Jedes Design-System wird zum Claude-Skill</title>
-  <meta name="description" content="skillui crawlt jede Website, jedes Repo, jeden Code und verpackt das komplette Design-System in einen Ordner, den Claude Code automatisch liest. Rein statisch. Keine KI. Keine API-Keys." />
+  <title>skillui — Turn any design system into a Claude skill</title>
+  <meta name="description" content="skillui crawls any website, repo, or codebase and packages the complete design system into a folder Claude Code reads automatically. Pure static analysis. No AI. No API keys." />
   <link rel="icon" href="logo-head.png" />
+  <link rel="alternate" hreflang="en" href="https://npxskillui.vercel.app/" />
+  <link rel="alternate" hreflang="de" href="https://npxskillui.vercel.app/de.html" />
+  <link rel="alternate" hreflang="x-default" href="https://npxskillui.vercel.app/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&family=Open+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital@0;1&display=swap" rel="stylesheet" />
-  <style>
-    /* ============================================================
-       MindBlow Media tokens (inlined subset)
-       ============================================================ */
-    :root {
-      --mbm-black: #232323;
-      --mbm-white: #f5f5f5;
-      --mbm-anthracite: #535353;
-      --gray-50: #eaeaea;
-      --gray-100: #f4f4f4;
-      --gray-200: #dfdfdf;
-      --gray-400: #797979;
-      --gray-500: #6e6e6e;
-      --gold-static: #e2a312;
-      --gold: #d4af37;
-      --wine: #993333;
-      --wine-dark: #7e2929;
-      --wine-tint: #f6ecec;
-      --link: #2ea3f2;
-      --link-hover: #1f86cf;
-      --green: #90c274;
-
-      --text-strong: #232323;
-      --text-body: #2f2f2f;
-      --text-muted: #6e6e6e;
-      --surface-page: #eaeaea;
-      --surface-card: #ffffff;
-      --border-subtle: #dfdfdf;
-
-      --font-display: "Raleway", Tahoma, Geneva, sans-serif;
-      --font-body: "Open Sans", Arial, Helvetica, sans-serif;
-      --font-quote: "Lora", "Courier New", Courier, serif;
-      --font-code: "Lora", "Courier New", Courier, monospace;
-
-      --radius-md: 8px;
-      --radius-lg: 14px;
-      --radius-xl: 22px;
-      --shadow-sm: 0 1px 2px rgba(35,35,35,.06), 0 2px 8px rgba(35,35,35,.05);
-      --shadow-md: 0 4px 12px rgba(35,35,35,.08), 0 12px 32px rgba(35,35,35,.07);
-      --shadow-lg: 0 12px 30px rgba(35,35,35,.12), 0 30px 60px rgba(35,35,35,.10);
-      --ease-out: cubic-bezier(.16,.84,.44,1);
-      --container: 1320px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: var(--font-body);
-      color: var(--text-body);
-      background: var(--surface-page);
-      font-size: 1.0625rem;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    h1, h2, h3, h4 {
-      font-family: var(--font-display);
-      color: var(--text-strong);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.08;
-      margin: 0;
-    }
-    p { margin: 0; }
-    a { color: var(--link); text-decoration: none; }
-    a:hover { color: var(--link-hover); text-decoration: underline; }
-
-    .wrap { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
-    .eyebrow {
-      font-family: var(--font-display);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      font-size: 0.78rem;
-      color: var(--gold-static);
-      margin: 0 0 18px;
-    }
-    .lead { font-size: 1.25rem; line-height: 1.6; color: var(--text-body); }
-    .muted { color: var(--text-muted); }
-
-    /* --- Buttons (interactive = Weinrot only) ------------------ */
-    .btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--font-display); font-weight: 700;
-      font-size: 1rem; letter-spacing: -0.01em;
-      padding: 14px 26px; border-radius: var(--radius-md);
-      border: 1.5px solid transparent; cursor: pointer;
-      transition: background .16s var(--ease-out), transform .1s var(--ease-out), color .16s;
-      text-decoration: none;
-    }
-    .btn:hover { text-decoration: none; }
-    .btn:active { transform: translateY(1px); }
-    .btn--primary { background: var(--wine); color: #fff; }
-    .btn--primary:hover { background: var(--wine-dark); color: #fff; }
-    .btn--ghost { background: transparent; color: var(--wine); border-color: var(--wine); }
-    .btn--ghost:hover { background: var(--wine-tint); color: var(--wine); }
-    .btn--on-dark { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
-    .btn--on-dark:hover { background: rgba(255,255,255,.08); color: #fff; }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: var(--font-display); font-weight: 700;
-      font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--gold-static);
-      background: rgba(226,163,18,.12);
-      border: 1px solid rgba(226,163,18,.35);
-      padding: 6px 12px; border-radius: 999px;
-    }
-
-    /* --- Header ------------------------------------------------- */
-    header.site {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(245,245,245,.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    header.site .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand img { height: 34px; width: auto; display: block; }
-    .brand .name { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.03em; color: var(--text-strong); }
-    .brand .name b { color: var(--wine); font-weight: 800; }
-    nav.top { display: flex; align-items: center; gap: 30px; }
-    nav.top a.navlink { color: var(--text-body); font-family: var(--font-display); font-weight: 600; font-size: 0.98rem; }
-    nav.top a.navlink:hover { color: var(--wine); text-decoration: none; }
-
-    /* --- Hero --------------------------------------------------- */
-    .hero { padding: 88px 0 96px; }
-    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
-    .hero h1 { font-size: clamp(2.6rem, 5.4vw, 4.25rem); }
-    .hero h1 .wine { color: var(--wine); }
-    .hero .lead { margin-top: 24px; max-width: 34ch; }
-    .hero .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-    .trust { display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
-    .trust .stat .num { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--text-strong); line-height: 1; letter-spacing: -0.03em; }
-    .trust .stat .num span { color: var(--gold-static); }
-    .trust .stat .label { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.02em; }
-
-    .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
-    .hero-mark { width: 82%; max-width: 360px; filter: drop-shadow(0 18px 40px rgba(35,35,35,.16)); }
-
-    /* --- Code block (Lora per brand) --------------------------- */
-    .code {
-      font-family: var(--font-code); font-size: 0.95rem;
-      background: var(--mbm-black); color: #f2f2f2;
-      border-radius: var(--radius-md); padding: 16px 18px;
-      display: flex; align-items: center; gap: 12px;
-      box-shadow: var(--shadow-md); overflow-x: auto;
-    }
-    .code .prompt { color: var(--gold); user-select: none; }
-    .code .cmd { white-space: nowrap; }
-    .code.block { display: block; line-height: 1.9; }
-    .code .c-flag { color: #90c274; }
-    .code .c-str { color: #7fbef0; }
-    .code .c-com { color: #9a9a9a; font-style: italic; }
-
-    /* --- Section slant helpers --------------------------------- */
-    section { position: relative; }
-    .pad { padding: 84px 0; }
-
-    /* --- The Highlight: dark band ------------------------------ */
-    .highlight { background: var(--mbm-black); color: var(--mbm-white); overflow: hidden; }
-    .highlight .eyebrow { color: var(--gold); }
-    .highlight h2 { color: #fff; font-size: clamp(2rem, 4vw, 3.1rem); max-width: 16ch; }
-    .highlight h2 .strike { position: relative; white-space: nowrap; }
-    .highlight h2 .strike::after {
-      content: ""; position: absolute; left: -2%; right: -2%; top: 54%; height: 4px;
-      background: var(--wine); transform: rotate(-2.5deg); border-radius: 3px;
-    }
-    .highlight .lead { color: #d8d8d8; margin-top: 22px; max-width: 46ch; }
-    .hl-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 60px; align-items: center; }
-    .cmp-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
-    .cmp-chip {
-      font-family: var(--font-display); font-weight: 600; font-size: 0.85rem;
-      padding: 8px 14px; border-radius: 999px;
-      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); color: #eaeaea;
-    }
-    .hl-note { margin-top: 30px; font-family: var(--font-quote); font-style: italic; color: #cfcfcf; font-size: 1.06rem; line-height: 1.6; }
-    .hl-note::before { content: "„"; font-family: var(--font-display); font-weight: 800; font-style: normal; color: var(--gold); font-size: 1.9rem; line-height: 0; vertical-align: -0.35em; margin-right: 4px; }
-
-    /* --- Live browser demo ------------------------------------- */
-    .demo { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
-    .demo .chrome { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--gray-100); border-bottom: 1px solid var(--border-subtle); }
-    .demo .dot { width: 11px; height: 11px; border-radius: 50%; }
-    .demo .dot.r { background: #e06c66; } .demo .dot.y { background: #e2c04a; } .demo .dot.g { background: #86c07a; }
-    .demo .url { margin-left: 10px; font-family: var(--font-code); font-size: 0.8rem; color: var(--gray-500); background: #fff; border: 1px solid var(--border-subtle); border-radius: 6px; padding: 5px 12px; flex: 1; }
-    .demo .viewport { position: relative; height: 320px; background: #fff; overflow: hidden; }
-    /* faux page content behind the banner */
-    .faux { padding: 28px 26px; }
-    .faux .fh { height: 22px; width: 46%; background: var(--gray-200); border-radius: 5px; }
-    .faux .fl { height: 12px; background: var(--gray-100); border-radius: 4px; margin-top: 14px; }
-    .faux .fl.s1 { width: 92%; } .faux .fl.s2 { width: 80%; } .faux .fl.s3 { width: 88%; } .faux .fl.s4 { width: 60%; }
-    .faux .cards { display: flex; gap: 14px; margin-top: 26px; }
-    .faux .cards div { flex: 1; height: 70px; background: var(--gray-100); border: 1px solid var(--border-subtle); border-radius: 10px; }
-    /* the CMP banner */
-    .cmp-banner {
-      position: absolute; left: 16px; right: 16px; bottom: 16px;
-      background: #fff; border: 1px solid var(--border-subtle);
-      border-radius: 12px; box-shadow: 0 -6px 24px rgba(35,35,35,.16);
-      padding: 18px 20px; display: flex; align-items: center; gap: 16px;
-      transition: opacity .45s var(--ease-out), transform .45s var(--ease-out);
-    }
-    .cmp-banner .txt { flex: 1; font-size: 0.86rem; color: var(--text-body); }
-    .cmp-banner .txt strong { font-family: var(--font-display); display: block; color: var(--text-strong); margin-bottom: 3px; }
-    .cmp-banner .mini { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; padding: 9px 16px; border-radius: 6px; border: none; cursor: default; }
-    .cmp-banner .mini.accept { background: var(--wine); color: #fff; }
-    .cmp-banner .mini.deny { background: transparent; color: var(--gray-500); border: 1px solid var(--border-subtle); }
-    .cmp-banner .tag { position: absolute; top: -11px; left: 18px; font-family: var(--font-code); font-size: 0.68rem; background: var(--mbm-black); color: #fff; padding: 2px 8px; border-radius: 5px; }
-    /* dismissed state */
-    .viewport.clean .cmp-banner { opacity: 0; transform: translateY(14px); pointer-events: none; }
-    .viewport.clean .pruned-flash { opacity: 1; }
-    .pruned-flash {
-      position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 22px; opacity: 0; transition: opacity .5s var(--ease-out) .15s; pointer-events: none;
-    }
-    .pruned-flash span { font-family: var(--font-code); font-size: 0.82rem; color: var(--green); background: rgba(35,35,35,.9); padding: 6px 14px; border-radius: 999px; }
-    .demo .controls { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--gray-100); border-top: 1px solid var(--border-subtle); }
-    .demo .controls .hint { font-family: var(--font-code); font-size: 0.8rem; color: var(--gray-500); margin-left: auto; }
-
-    /* --- Cards / modes ----------------------------------------- */
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 46px; }
-    .card {
-      background: var(--surface-card); border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg); padding: 26px 24px; box-shadow: var(--shadow-sm);
-      transition: box-shadow .18s var(--ease-out), transform .18s var(--ease-out);
-    }
-    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-    .card .kicker { font-family: var(--font-code); font-size: 0.8rem; color: var(--wine); }
-    .card h3 { font-size: 1.3rem; margin: 10px 0 10px; }
-    .card p { font-size: 0.96rem; color: var(--text-body); }
-    .card .cmdline { margin-top: 16px; font-family: var(--font-code); font-size: 0.82rem; color: var(--gray-500); background: var(--gray-100); border-radius: 6px; padding: 8px 10px; overflow-x: auto; }
-
-    .section-head { max-width: 60ch; }
-    .section-head h2 { font-size: clamp(1.9rem, 3.4vw, 2.7rem); }
-    .section-head p { margin-top: 16px; }
-
-    /* --- Feature list ------------------------------------------ */
-    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 48px; margin-top: 44px; }
-    .feat { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
-    .feat svg { flex: 0 0 auto; margin-top: 3px; }
-    .feat .ft { font-family: var(--font-display); font-weight: 700; color: var(--text-strong); }
-    .feat .fd { font-size: 0.92rem; color: var(--text-muted); }
-
-    /* --- Quick start (numbered, sketch-ish) -------------------- */
-    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 46px; }
-    .step { background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px 24px; box-shadow: var(--shadow-sm); }
-    .step .no {
-      font-family: var(--font-display); font-weight: 800; font-size: 1.1rem;
-      width: 40px; height: 40px; border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-      color: #fff; background: var(--gold-static); margin-bottom: 16px;
-    }
-    .step h3 { font-size: 1.2rem; margin-bottom: 10px; }
-    .step p { font-size: 0.95rem; color: var(--text-body); }
-    .step .cmdline { margin-top: 14px; font-family: var(--font-code); font-size: 0.82rem; color: #eaeaea; background: var(--mbm-black); border-radius: 6px; padding: 10px 12px; overflow-x: auto; }
-    .step .cmdline .c-com { color: #9a9a9a; font-style: italic; }
-    .step .cmdline .c-flag { color: #90c274; }
-
-    /* --- CTA band ---------------------------------------------- */
-    .cta-band { background: var(--mbm-anthracite); color: #fff; text-align: center; }
-    .cta-band h2 { color: #fff; font-size: clamp(1.9rem, 3.6vw, 2.8rem); }
-    .cta-band p { color: #e2e2e2; margin: 18px auto 30px; max-width: 52ch; }
-
-    /* --- Footer ------------------------------------------------ */
-    footer.site { background: var(--mbm-black); color: #cfcfcf; padding: 54px 0 40px; }
-    footer.site .frow { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
-    footer.site .brand .name { color: #fff; }
-    footer.site .brand img { filter: brightness(0) invert(1); opacity: .9; }
-    footer.site a { color: #8fc7ef; }
-    footer.site .flinks { display: flex; gap: 28px; flex-wrap: wrap; font-family: var(--font-display); font-weight: 600; }
-    footer.site .flinks a { color: #dcdcdc; }
-    footer.site .flinks a:hover { color: #fff; }
-    footer.site .sig { margin-top: 34px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.12); font-size: 0.86rem; color: #9a9a9a; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-    footer.site .sig .heart { color: var(--wine); }
-
-    /* --- Responsive -------------------------------------------- */
-    @media (max-width: 960px) {
-      .hero-grid, .hl-grid { grid-template-columns: 1fr; gap: 40px; }
-      .hero-visual { order: -1; }
-      .hero-mark { max-width: 220px; }
-      .grid-4 { grid-template-columns: 1fr 1fr; }
-      .steps { grid-template-columns: 1fr; }
-      .features { grid-template-columns: 1fr; }
-      nav.top .navlink { display: none; }
-    }
-    @media (max-width: 560px) {
-      .wrap { padding: 0 20px; }
-      .grid-4 { grid-template-columns: 1fr; }
-      .trust { gap: 22px; }
-      .pad { padding: 60px 0; }
-      .hero { padding: 56px 0 64px; }
-    }
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); }
-    .reveal.in { opacity: 1; transform: none; }
-    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js" defer></script>
 </head>
 <body>
 
   <!-- ===================== Header ===================== -->
   <header class="site">
     <div class="wrap">
-      <a class="brand" href="#top" aria-label="skillui Startseite">
+      <a class="brand" href="#top" aria-label="skillui home">
         <img src="logo-head.png" alt="MindBlow Media" />
         <span class="name">skill<b>ui</b></span>
       </a>
       <nav class="top">
-        <a class="navlink" href="#highlight">Cookie-Dismiss</a>
-        <a class="navlink" href="#modi">Modi</a>
-        <a class="navlink" href="#start">Loslegen</a>
-        <a class="btn btn--primary" href="#start">Installieren</a>
+        <a class="navlink" href="#highlight">Cookie-dismiss</a>
+        <a class="navlink" href="#modi">Modes</a>
+        <a class="navlink" href="#start">Get started</a>
+        <span class="lang" aria-label="Language">
+          <a href="./" aria-current="page">EN</a><span class="sep">/</span><a href="de.html">DE</a>
+        </span>
+        <a class="btn btn--primary" href="#start">Install</a>
       </nav>
     </div>
   </header>
@@ -330,21 +41,27 @@
     <div class="wrap">
       <div class="hero-grid">
         <div>
-          <p class="eyebrow">Design-System-Extraktion für Claude Code</p>
-          <h1>Jedes Design-System wird zum <span class="wine">Claude-Skill.</span></h1>
-          <p class="lead">skillui crawlt jede Website, jedes Repo, jeden Code. Farben, Typografie, Spacing, Animationen und Komponenten landen in einem Ordner, den Claude Code automatisch liest. Rein statisch. Keine KI. Keine API-Keys.</p>
+          <p class="eyebrow">Design-system extraction for Claude Code</p>
+          <h1>Turn any design system into a <span class="wine">Claude skill.</span></h1>
+          <p class="lead">skillui crawls any website, repo, or codebase. Colors, typography, spacing, animations, and components land in one folder that Claude Code reads automatically. Pure static analysis. No AI. No API keys.</p>
           <div class="cta-row">
-            <a class="btn btn--primary" href="#start">Jetzt loslegen</a>
-            <a class="btn btn--ghost" href="https://github.com/wingerter/npxskillui" target="_blank" rel="noopener">Auf GitHub ansehen</a>
+            <a class="btn btn--primary" href="#start">Get started</a>
+            <a class="btn btn--ghost" href="https://github.com/wingerter/npxskillui" target="_blank" rel="noopener">View on GitHub</a>
           </div>
           <div class="trust">
-            <div class="stat"><div class="num"><span>0</span></div><div class="label">API-Keys nötig</div></div>
-            <div class="stat"><div class="num"><span>100</span>&nbsp;%</div><div class="label">statische Analyse</div></div>
-            <div class="stat"><div class="num"><span>4</span></div><div class="label">Extraktions-Modi</div></div>
+            <div class="stat"><div class="num"><span>0</span></div><div class="label">API keys needed</div></div>
+            <div class="stat"><div class="num"><span>100</span>%</div><div class="label">static analysis</div></div>
+            <div class="stat"><div class="num"><span>4</span></div><div class="label">extraction modes</div></div>
           </div>
         </div>
         <div class="hero-visual">
-          <img class="hero-mark" src="logo-head.png" alt="MindBlow Media Kopfmarke" />
+          <div class="video-frame reveal">
+            <video src="demo.mp4" autoplay muted loop playsinline controls preload="metadata" aria-label="skillui demo: one-shotting a landing page in Claude Code">
+              Your browser does not support the video tag. Watch the demo
+              <a href="https://github.com/wingerter/npxskillui" target="_blank" rel="noopener">on GitHub</a>.
+            </video>
+          </div>
+          <p class="video-cap"><b>Notion's landing page</b>, one-shotted in minutes from a single prompt.</p>
         </div>
       </div>
       <div style="margin-top:46px; max-width:560px;">
@@ -358,24 +75,24 @@
     <div class="wrap">
       <div class="hl-grid">
         <div class="reveal">
-          <p class="eyebrow">Das Feature, das den Unterschied macht</p>
-          <h2>Cookie-Banner? <span class="strike">Weg</span>, bevor der Screenshot fällt.</h2>
-          <p class="lead">Ein Consent-Overlay verfälscht jede Extraktion: Es verdeckt die echte Seite, kippt die Farb-Tokens und ruiniert die Scroll-Journey. skillui entfernt bekannte CMP-Banner <strong style="color:#fff">automatisch</strong>, bevor überhaupt ein Pixel erfasst wird.</p>
+          <p class="eyebrow">The feature that makes the difference</p>
+          <h2>Cookie banners? <span class="strike">Gone</span> before the screenshot fires.</h2>
+          <p class="lead">A consent overlay corrupts every extraction: it hides the real page, skews the color tokens, and ruins the scroll journey. skillui removes known CMP banners <strong style="color:#fff">automatically</strong>, before a single pixel is captured.</p>
           <div class="cmp-row">
             <span class="cmp-chip">Cookiebot</span>
             <span class="cmp-chip">OneTrust</span>
             <span class="cmp-chip">Osano</span>
             <span class="cmp-chip">TrustArc</span>
-            <span class="cmp-chip">+ generische GDPR-Overlays</span>
+            <span class="cmp-chip">+ generic GDPR overlays</span>
           </div>
-          <p class="hl-note">Reines DOM-Pruning: kein Klick auf „Akzeptieren", kein „Ablehnen", kein Netzwerk-Call. Ein persistenter MutationObserver räumt das Banner erneut weg, sobald das CMP-Skript es nachlädt. Ihre Tokens spiegeln die echte Seite, nicht den Consent-Layer.</p>
+          <p class="hl-note">Pure DOM pruning: no click on "Accept", no "Reject", no network call. A persistent MutationObserver clears the banner again the moment the CMP script re-injects it. Your tokens reflect the real page, not the consent layer.</p>
         </div>
 
         <!-- Live browser demo -->
-        <div class="demo reveal" aria-label="Interaktive Demo: Cookie-Banner entfernen">
+        <div class="demo reveal" aria-label="Interactive demo: removing a cookie banner">
           <div class="chrome">
             <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="url">https://ihre-referenz-seite.de</span>
+            <span class="url">https://your-reference-site.com</span>
           </div>
           <div class="viewport" id="viewport">
             <div class="faux">
@@ -385,76 +102,76 @@
             </div>
             <div class="cmp-banner" id="banner">
               <span class="tag">#CybotCookiebotDialog</span>
-              <div class="txt"><strong>Wir schätzen Ihre Privatsphäre</strong>Diese Website nutzt Cookies, um Ihr Erlebnis zu verbessern.</div>
-              <button class="mini deny" tabindex="-1">Ablehnen</button>
-              <button class="mini accept" tabindex="-1">Alle akzeptieren</button>
+              <div class="txt"><strong>We value your privacy</strong>This website uses cookies to improve your experience.</div>
+              <button class="mini deny" tabindex="-1">Reject</button>
+              <button class="mini accept" tabindex="-1">Accept all</button>
             </div>
             <div class="pruned-flash"><span id="flashText">✓ banner node removed · sweep clean</span></div>
           </div>
           <div class="controls">
-            <button class="btn btn--primary" id="runBtn" style="padding:11px 20px;font-size:.94rem;">skillui ausführen</button>
-            <button class="btn btn--ghost" id="resetBtn" style="padding:11px 18px;font-size:.94rem;">Zurücksetzen</button>
-            <span class="hint" id="hintText">Banner sichtbar · bereit zur Extraktion</span>
+            <button class="btn btn--primary" id="runBtn" style="padding:11px 20px;font-size:.94rem;">Run skillui</button>
+            <button class="btn btn--ghost" id="resetBtn" style="padding:11px 18px;font-size:.94rem;">Reset</button>
+            <span class="hint" id="hintText" data-default="Banner visible · ready to extract" data-clean="Banner node removed · page ready for clean tokens">Banner visible · ready to extract</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== Modi ===================== -->
+  <!-- ===================== Modes ===================== -->
   <section class="pad" id="modi">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow">Vier Wege zur Extraktion</p>
-        <h2>Egal, wo Ihr Design-System lebt.</h2>
-        <p class="muted lead">URL, lokaler Ordner oder Git-Repo: skillui liefert jedes Mal denselben Claude-fertigen Skill-Ordner.</p>
+        <p class="eyebrow">Four ways to extract</p>
+        <h2>Wherever your design system lives.</h2>
+        <p class="muted lead">URL, local folder, or Git repo: skillui delivers the same Claude-ready skill folder every time.</p>
       </div>
       <div class="grid-4">
         <div class="card reveal">
           <div class="kicker">default</div>
-          <h3>Statische Analyse</h3>
-          <p>HTML, CSS, Fonts, Farb-Tokens, Spacing und Typografie, von jeder Seite, ganz ohne Browser.</p>
+          <h3>Static analysis</h3>
+          <p>HTML, CSS, fonts, color tokens, spacing, and typography, from any site, with no browser required.</p>
           <div class="cmdline">skillui --url notion.so</div>
         </div>
         <div class="card reveal">
           <div class="kicker">ultra</div>
-          <h3>Cinematic-Capture</h3>
-          <p>Playwright erfasst Scroll-Screenshots, Interaktions-Diffs, Keyframes & DOM-Komponenten. <strong>Inkl. Cookie-Dismiss.</strong></p>
+          <h3>Cinematic capture</h3>
+          <p>Playwright captures scroll screenshots, interaction diffs, keyframes & DOM components. <strong>Cookie-dismiss included.</strong></p>
           <div class="cmdline">skillui --url linear.app --mode ultra</div>
         </div>
         <div class="card reveal">
           <div class="kicker">dir</div>
-          <h3>Lokaler Scan</h3>
-          <p>Durchsucht <span style="font-family:var(--font-code)">.css/.scss/.ts/.tsx</span> nach Tokens, Tailwind-Config & CSS-Variablen.</p>
+          <h3>Local scan</h3>
+          <p>Scans <span style="font-family:var(--font-code)">.css/.scss/.ts/.tsx</span> for tokens, Tailwind config & CSS variables.</p>
           <div class="cmdline">skillui --dir ./my-app</div>
         </div>
         <div class="card reveal">
           <div class="kicker">repo</div>
-          <h3>Klonen & Scannen</h3>
-          <p>Klont jedes öffentliche Git-Repository und führt den Dir-Modus automatisch aus.</p>
+          <h3>Clone & scan</h3>
+          <p>Clones any public Git repository and runs dir mode automatically.</p>
           <div class="cmdline">skillui --repo github.com/org/repo</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== Was Sie bekommen ===================== -->
+  <!-- ===================== What you get ===================== -->
   <section class="pad" style="background:var(--surface-card); border-top:1px solid var(--border-subtle); border-bottom:1px solid var(--border-subtle);">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow">Der Output</p>
-        <h2>Ein Ordner, den Claude sofort versteht.</h2>
-        <p class="muted lead">Öffnen, <span style="font-family:var(--font-code)">claude</span> tippen, bauen lassen. <span style="font-family:var(--font-code)">CLAUDE.md</span> und <span style="font-family:var(--font-code)">SKILL.md</span> werden automatisch gelesen, kein manuelles Setup.</p>
+        <p class="eyebrow">The output</p>
+        <h2>A folder Claude understands instantly.</h2>
+        <p class="muted lead">Open it, type <span style="font-family:var(--font-code)">claude</span>, let it build. <span style="font-family:var(--font-code)">CLAUDE.md</span> and <span style="font-family:var(--font-code)">SKILL.md</span> are read automatically, with no manual setup.</p>
       </div>
       <div class="features">
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Farb-Tokens</div><div class="fd">Als CSS-Variablen und JSON, sauber benannt.</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Typografie-Skala & Fonts</div><div class="fd">Google-Fonts werden lokal mitgebündelt.</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Spacing-Grid</div><div class="fd">Abstände und Rhythmus als konsistente Skala.</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">7 Scroll-Journey-Screenshots</div><div class="fd">Die echte Seite, ohne Consent-Overlay (Ultra).</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Animationen & Keyframes</div><div class="fd">CSS-Keyframes und Interaktions-Diffs (Ultra).</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">DOM-Komponenten-Fingerprints</div><div class="fd">Flex/Grid-Layout und Komponentenmuster (Ultra).</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">CLAUDE.md + SKILL.md</div><div class="fd">Automatisch generiert, sofort einsatzbereit.</div></div></div>
-        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">.skill-ZIP</div><div class="fd">Fertig verpackt zum Teilen und Wiederverwenden.</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Color tokens</div><div class="fd">As CSS variables and JSON, cleanly named.</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Type scale & fonts</div><div class="fd">Google Fonts bundled locally.</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Spacing grid</div><div class="fd">Spacing and rhythm as a consistent scale.</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">7 scroll-journey screenshots</div><div class="fd">The real page, without consent overlay (Ultra).</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">Animations & keyframes</div><div class="fd">CSS keyframes and interaction diffs (Ultra).</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">DOM component fingerprints</div><div class="fd">Flex/grid layout and component patterns (Ultra).</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">CLAUDE.md + SKILL.md</div><div class="fd">Auto-generated, ready to use.</div></div></div>
+        <div class="feat reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#993333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><div class="ft">.skill ZIP</div><div class="fd">Packaged to share and reuse.</div></div></div>
       </div>
     </div>
   </section>
@@ -463,27 +180,27 @@
   <section class="pad" id="start">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow">In drei Schritten</p>
-        <h2>Von der URL zum fertigen UI.</h2>
+        <p class="eyebrow">In three steps</p>
+        <h2>From URL to finished UI.</h2>
       </div>
       <div class="steps">
         <div class="step reveal">
           <div class="no">1</div>
-          <h3>Extrahieren</h3>
-          <p>Ziehen Sie ein Design-System aus jeder beliebigen URL.</p>
-          <div class="cmdline"><span class="c-com"># Design-System holen</span><br>skillui <span class="c-flag">--url</span> https://notion.so</div>
+          <h3>Extract</h3>
+          <p>Pull a design system from any URL.</p>
+          <div class="cmdline"><span class="c-com"># grab the design system</span><br>skillui <span class="c-flag">--url</span> https://notion.so</div>
         </div>
         <div class="step reveal">
           <div class="no">2</div>
-          <h3>Öffnen</h3>
-          <p>Den Output-Ordner in Claude Code öffnen.</p>
+          <h3>Open</h3>
+          <p>Open the output folder in Claude Code.</p>
           <div class="cmdline">cd notion-design <span class="c-com">&amp;&amp;</span> claude</div>
         </div>
         <div class="step reveal">
           <div class="no">3</div>
-          <h3>Bauen lassen</h3>
-          <p>Claude kennt das Design-System bereits. Einfach beschreiben.</p>
-          <div class="cmdline"><span class="c-com">„Bau mir eine Landingpage im Stil dieses Systems."</span></div>
+          <h3>Build</h3>
+          <p>Claude already knows the design system. Just describe it.</p>
+          <div class="cmdline"><span class="c-com">"Build me a landing page in the style of this system."</span></div>
         </div>
       </div>
     </div>
@@ -492,13 +209,13 @@
   <!-- ===================== CTA band ===================== -->
   <section class="cta-band pad">
     <div class="wrap reveal">
-      <h2>Bereit, jedes Design-System zu klonen?</h2>
-      <p>Ein Befehl installiert skillui. Ab da liest Claude Code die exakte visuelle Sprache jeder Seite, Consent-Banner inklusive entfernt.</p>
+      <h2>Ready to clone any design system?</h2>
+      <p>One command installs skillui. From then on, Claude Code reads the exact visual language of any page, with consent banners already stripped out.</p>
       <div class="code block" style="max-width:420px;margin:0 auto 28px;text-align:left;">
         <span class="prompt">$</span> npm install -g skillui<br>
         <span class="prompt">$</span> skillui <span class="c-flag">--url</span> <span class="c-str">https://linear.app</span> <span class="c-flag">--mode</span> ultra
       </div>
-      <a class="btn btn--on-dark" href="https://github.com/wingerter/npxskillui" target="_blank" rel="noopener">Dokumentation auf GitHub</a>
+      <a class="btn btn--on-dark" href="https://github.com/wingerter/npxskillui" target="_blank" rel="noopener">Documentation on GitHub</a>
     </div>
   </section>
 
@@ -511,56 +228,23 @@
             <img src="logo-head.png" alt="MindBlow Media" style="height:30px;" />
             <span class="name" style="font-family:var(--font-display);font-weight:800;font-size:1.2rem;letter-spacing:-0.03em;">skill<b style="color:#c96;">ui</b></span>
           </div>
-          <p class="muted" style="max-width:34ch;color:#9a9a9a;font-size:.92rem;">Reverse-Engineering für Design-Systeme. Aus jeder Seite ein Claude-fertiger Skill: rein statisch, ohne KI, ohne API-Keys.</p>
+          <p class="muted" style="max-width:34ch;color:#9a9a9a;font-size:.92rem;">Reverse-engineering for design systems. Every page becomes a Claude-ready skill: pure static, no AI, no API keys.</p>
         </div>
         <div class="flinks">
-          <a href="#highlight">Cookie-Dismiss</a>
-          <a href="#modi">Modi</a>
-          <a href="#start">Loslegen</a>
+          <a href="#highlight">Cookie-dismiss</a>
+          <a href="#modi">Modes</a>
+          <a href="#start">Get started</a>
           <a href="https://github.com/wingerter/npxskillui" target="_blank" rel="noopener">GitHub</a>
           <a href="https://www.npmjs.com/package/skillui" target="_blank" rel="noopener">npm</a>
+          <a href="de.html">Deutsch</a>
         </div>
       </div>
       <div class="sig">
-        <span>© <span id="year">2026</span> skillui · ein Werkzeug von MindBlow Media.</span>
-        <span>Entwickelt mit <span class="heart">❤</span> in München &amp; Bangkok</span>
+        <span>© <span id="year">2026</span> skillui · a tool by MindBlow Media.</span>
+        <span>Made with <span class="heart">❤</span> in Munich &amp; Bangkok</span>
       </div>
     </div>
   </footer>
 
-  <script>
-    // --- Cookie-dismiss live demo -------------------------------
-    (function () {
-      var vp = document.getElementById('viewport');
-      var runBtn = document.getElementById('runBtn');
-      var resetBtn = document.getElementById('resetBtn');
-      var hint = document.getElementById('hintText');
-      if (!vp || !runBtn) return;
-      runBtn.addEventListener('click', function () {
-        vp.classList.add('clean');
-        hint.textContent = 'Banner-Node entfernt · Seite bereit für saubere Tokens';
-      });
-      resetBtn.addEventListener('click', function () {
-        vp.classList.remove('clean');
-        hint.textContent = 'Banner sichtbar · bereit zur Extraktion';
-      });
-    })();
-
-    // --- Year ---------------------------------------------------
-    (function () {
-      var y = document.getElementById('year');
-      if (y) y.textContent = new Date().getFullYear();
-    })();
-
-    // --- Scroll reveal ------------------------------------------
-    (function () {
-      var els = document.querySelectorAll('.reveal');
-      if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-      }, { threshold: 0.12 });
-      els.forEach(function (e) { io.observe(e); });
-    })();
-  </script>
 </body>
 </html>
