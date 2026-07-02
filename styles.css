@@ -138,6 +138,9 @@
     .hero h1 .wine { color: var(--wine); }
     .hero .lead { margin-top: 24px; max-width: 34ch; }
     .hero .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; }
+    .badges a { line-height: 0; display: inline-flex; }
+    .badges img { height: 22px; display: block; }
     .trust { display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
     .trust .stat .num { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--text-strong); line-height: 1; letter-spacing: -0.03em; }
     .trust .stat .num span { color: var(--gold-static); }
